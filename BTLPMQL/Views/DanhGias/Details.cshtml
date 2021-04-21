@@ -1,0 +1,34 @@
+﻿@model BTLPMQL.Models.DanhGia
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 style="color: red">Chi Tiết</h2>
+<hr />
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TenKhachHang)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenKhachHang)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NhanXet)
+        </dt>
+
+        <dd>
+            @Html.Raw(Model.NhanXet)
+        </dd>
+
+    </dl>
+</div>
+<p>
+   
+    @Html.ActionLink("Quay Lại", "Index")
+</p>

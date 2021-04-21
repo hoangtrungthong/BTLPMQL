@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BTLPMQL.Models.DanhGia>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 style="color: red">Những Lời Góp Ý Của Các Tiên Tửu </h2>
+
+<p>
+    @Html.ActionLink("Góp Ý", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TenKhachHang)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NhanXet)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr style="border: 1px solid #808080; background-color: #ccc;border-style: none;">
+        <td>
+            @Html.DisplayFor(modelItem => item.TenKhachHang)
+        </td>
+        <td>
+            @Html.Raw(item.NhanXet)
+        </td>
+        <td>
+            @Html.ActionLink("Sửa", "Edit", new { id=item.IDKhachHang }) |
+            @Html.ActionLink("Chi Tiết", "Details", new { id=item.IDKhachHang }) |
+            @Html.ActionLink("Xóa", "Delete", new { id=item.IDKhachHang })
+        </td>
+    </tr>
+}
+
+</table>
