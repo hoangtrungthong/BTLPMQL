@@ -49,10 +49,12 @@ namespace BTLPMQL.Controllers
                 {
                     FormsAuthentication.SetAuthCookie(acc.UserName, true);
                     return RedirectToAction("Index" , "KhoRuous");
+                    return RedirectToAction("Index", "XuatKhaus");
+                    return RedirectToAction("Index", "NhapKhaus");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Thông Tin Đăng Nhập Không Chính Xác");
+                    ModelState.AddModelError(" ", "Thông Tin Đăng Nhập Không Chính Xác");
                 }    
             }
             return View(acc);

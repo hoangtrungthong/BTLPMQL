@@ -19,6 +19,7 @@ namespace BTLPMQL.Models
         public int IDTaiKhoan { get; set; }
         [Required(ErrorMessage = "Tên Tài Khoản Không Chính Xác")]
         public string UserName { get; set; }
+
         [Required(ErrorMessage = "Mật Khẩu Không Chính Xác")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

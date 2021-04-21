@@ -15,6 +15,7 @@ namespace BTLPMQL.Controllers
         private RuouDbContext db = new RuouDbContext();
 
         // GET: XuatKhaus
+        [Authorize]
         public ActionResult Index()
         {
             return View(db.XuatKhaus.ToList());
