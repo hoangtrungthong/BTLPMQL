@@ -12,29 +12,29 @@
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TenRuou)
+        <th width="11%">
+            Tên Rượu
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NongDo)
+        <th width="11%">
+            Nồng Độ
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TinhChat)
+        <th width="11%">
+            Tính Chất
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SoLuong)
+        <th width="11%">
+           Số Lượng
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DonVi)
+        <th width="11%">
+           Đơn Vị
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TheTich)
+        <th width="11%">
+            Thể Tích
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NguonGoc)
+        <th width="11%">
+           Nguồn Gốc
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DanhGia)
+        <th width="11%">
+           Đánh Giá
         </th>
         <th></th>
     </tr>
@@ -65,7 +65,10 @@
         <td>
             @Html.Raw(item.DanhGia)
         </td>
-        <td style="border: 1px solid #808080; background-color: #ccc;border-style: none;">
+        <td style="        border: 1px solid #808080;
+        background-color: #ccc;
+        border-style: none;
+        width: 11%;">
             @Html.ActionLink("Sửa", "Edit", new { id=item.IDRuou }) |
             @Html.ActionLink("Chi Tiết", "Details", new { id=item.IDRuou }) |
             @Html.ActionLink("Xóa", "Delete", new { id=item.IDRuou })
