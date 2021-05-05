@@ -68,11 +68,7 @@
             <td>
                 @Html.Raw(item.DanhGia)
             </td>
-            <td style="        border: 1px solid #808080;
-        background-color: #ccc;
-        border-style: none;
-        width: 11%;
-">
+            <td style="width: 11%;">
                 @Html.ActionLink("Sửa", "Edit", new { id = item.IDRuou }) |
                 @Html.ActionLink("Chi Tiết", "Details", new { id = item.IDRuou }) |
                 @Html.ActionLink("Xóa", "Delete", new { id = item.IDRuou })
