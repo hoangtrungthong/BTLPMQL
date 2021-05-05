@@ -10,7 +10,7 @@ namespace BTLPMQL.Controllers
     public class AccountController : Controller
     {
         Encryption encry = new Encryption();
-        BTLPMQLEntities db = new BTLPMQLEntities();
+        RuouDbContext db = new RuouDbContext();
         // GET: Account
         [HttpGet]
         public ActionResult Register()
@@ -51,6 +51,9 @@ namespace BTLPMQL.Controllers
                     return RedirectToAction("Index" , "KhoRuous");
                     return RedirectToAction("Index", "XuatKhaus");
                     return RedirectToAction("Index", "NhapKhaus");
+                    return RedirectToAction("Edit", "DanhGias");
+                    return RedirectToAction("Delete", "DanhGias");
+
                 }
                 else
                 {
@@ -62,7 +65,7 @@ namespace BTLPMQL.Controllers
         public ActionResult SignOut()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
 

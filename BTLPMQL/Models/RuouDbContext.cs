@@ -14,6 +14,7 @@ namespace BTLPMQL.Models
 
         public virtual DbSet<KhoRuou> KhoRuous { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
+      
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }
