@@ -8,10 +8,11 @@
 <h2 style="color: blueviolet">Cập Nhật Rượu Vào Kho</h2>
 @using (Html.BeginForm("UploadFile", "KhoRuous", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <div>
-        @Html.TextBox("file", "", new { type = "file" }) <br />
-        <input type="submit" value="Tải Lên" />
-    </div>
+<div>
+    @Html.TextBox("file", "", new { type = "file" }) <br />
+    <input type="submit" value="Tải Lên" />
+   @* @Html.ValidationMessageFor(model => model.file)*@
+</div>
 }
 <hr />
 @using (Html.BeginForm())

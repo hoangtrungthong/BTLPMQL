@@ -17,7 +17,7 @@ namespace BTLPMQL.Controllers
     public class KhoRuousController : Controller
     {
         private RuouDbContext db = new RuouDbContext();
-        ReadExcel excel = new ReadExcel();
+       /* ReadExcel excel = new ReadExcel();*/
         // GET: KhoRuous
         [Authorize]
         public ActionResult Index()
@@ -120,104 +120,91 @@ namespace BTLPMQL.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult UploadFile(HttpPostedFileBase file)
-        {
-            try
-            {
-                if (file.ContentLength > 0)
-                {
 
-                    string _FileName = DateTime.Now.Year.ToString() + DateTime.Now.Date.ToString();
- 
-                    string _path = Path.Combine(Server.MapPath("~/Uploads/ExcelFile/"), _FileName);
- 
-                    file.SaveAs(_path);
-  
-                    CopyDataByBulk(ReadDataFromExcelFile(_path));
-                    ViewBag.ThongBao = "Cập Nhật Kho Rượu Thành Công";
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ThongBao = "Lỗi Rồi";
-            }
-            return View("Index");
-        }
 
-        private void UploadExcelFile(HttpPostedFileBase file)
-        {
-
-            string _FileName = "ruoucapnhat.xlsx";
-
-            string _path = Path.Combine(Server.MapPath("~/Uploads/ExcelFile"), _FileName);
-
-            file.SaveAs(_path);
-            DataTable dt = ReadDataFromExcelFile(_path);
-
-            CopyDataByBulk(dt);
-        }
- 
         public ActionResult DownloadFile()
         {
-          
-            string path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/ExcelFile/";
-          
-            byte[] fileBytes = System.IO.File.ReadAllBytes(path + "ruoucapnhat.xlsx");
-           
-            string fileName = "ruoucapnhat.xlsx";
-       
+            //duong dan chua file muon download
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/Excels/"; // tu muc chua fiel excel
+            //chuyen file sang dang byte
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path + "fielexcel.xlsx"); //doan nay de file excel
+            //ten file khi download ve
+            string fileName = "Sinhviencapnhat.xlsx";
+            //tra ve file
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
-
-        
-    private void CopyDataByBulk(DataTable dt)
+        public ActionResult UploadFile(HttpPostedFileBase file)
         {
-           
-            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["RuouDbContext"].ConnectionString);
-            SqlBulkCopy bulkcopy = new SqlBulkCopy(con);
-            bulkcopy.DestinationTableName = "KhoRuous";
-            bulkcopy.ColumnMappings.Add(0, "IDRuou");
-            bulkcopy.ColumnMappings.Add(1, "TenRuou");
-            bulkcopy.ColumnMappings.Add(3, "NongDo");
-            bulkcopy.ColumnMappings.Add(4, "TinhChat");
-            bulkcopy.ColumnMappings.Add(5, "SoLuong");
-            bulkcopy.ColumnMappings.Add(6, "DonVi");
-            bulkcopy.ColumnMappings.Add(7, "TheTich");
-            bulkcopy.ColumnMappings.Add(8, "NguonGoc");
-            bulkcopy.ColumnMappings.Add(9, "DanhGia");
-            con.Open();
-            bulkcopy.WriteToServer(dt);
-            con.Close();
+            //dat ten cho file
+            string _FileName = "ruoumoi.xls";
+            //duong dan luu file
+            string _path = Path.Combine(Server.MapPath("~/Uploads/Excels"), _FileName);
+            //luu file len server
+            file.SaveAs(_path);
+
+            //doc du lieu tu file excel
+
+            DataTable dt = ReadDataFromExcelFile(_path);
+            /* CopyDataByBulk(dt);*/
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                KhoRuou kr = new KhoRuou();
+                kr.TenRuou = dt.Rows[i][0].ToString();
+                kr.NongDo = dt.Rows[i][1].ToString();
+                kr.TinhChat = dt.Rows[i][2].ToString();
+                kr.SoLuong = dt.Rows[i][3].ToString();
+                kr.DonVi = dt.Rows[i][4].ToString();
+                kr.TheTich = dt.Rows[i][5].ToString();
+                kr.NguonGoc = dt.Rows[i][6].ToString();
+                kr.DanhGia = dt.Rows[i][7].ToString();
+               
+                db.KhoRuous.Add(kr);
+                db.SaveChanges();
+            }
+
+            /* CopyDataByBulk(excel.ReadDataFromExcelFile(_path));*/
+            return RedirectToAction("Index");
         }
 
+        private void CopyDataByBulk(object v)
+        {
+            throw new NotImplementedException();
+        }
 
+        //upload file
         public DataTable ReadDataFromExcelFile(string filepath)
         {
-            string connectionString = " ";
+            string connectionString = "";
             string fileExtention = filepath.Substring(filepath.Length - 4).ToLower();
             if (fileExtention.IndexOf("xlsx") == 0)
             {
                 connectionString = "Provider = Microsoft.ACE.OLEDB.12.0; Data Source =" + filepath + ";Extended Properties=\"Excel 12.0 Xml;HDR=NO\"";
             }
-            else if (fileExtention.IndexOf("xls") == 0)
+            else if (fileExtention.IndexOf(".xls") == 0)
             {
                 connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filepath + ";Extended Properties=Excel 8.0";
             }
+
+            // Tạo đối tượng kết nối
             OleDbConnection oledbConn = new OleDbConnection(connectionString);
             DataTable data = null;
             try
             {
-               
+                // Mở kết nối
                 oledbConn.Open();
-       
+
+                // Tạo đối tượng OleDBCommand và query data từ sheet có tên "Sheet1"
                 OleDbCommand cmd = new OleDbCommand("SELECT * FROM [Sheet1$]", oledbConn);
-         
+
+                // Tạo đối tượng OleDbDataAdapter để thực thi việc query lấy dữ liệu từ tập tin excel
                 OleDbDataAdapter oleda = new OleDbDataAdapter();
 
                 oleda.SelectCommand = cmd;
-      
+
+                // Tạo đối tượng DataSet để hứng dữ liệu từ tập tin excel
                 DataSet ds = new DataSet();
 
+                // Đổ đữ liệu từ tập excel vào DataSet
                 oleda.Fill(ds);
 
                 data = ds.Tables[0];
@@ -227,10 +214,55 @@ namespace BTLPMQL.Controllers
             }
             finally
             {
-              oledbConn.Close();
+                // Đóng chuỗi kết nối
+                oledbConn.Close();
             }
             return data;
         }
+
+        private void CopyDataByBulk(DataTable dt)
+        {
+            //lay ket noi voi database luu trong file webconfig
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["RuouDbContext"].ConnectionString);
+            SqlBulkCopy bulkcopy = new SqlBulkCopy(con);
+            bulkcopy.DestinationTableName = "KhoRuous";
+            bulkcopy.ColumnMappings.Add(0, "Tên Rượu");
+            bulkcopy.ColumnMappings.Add(1, "Nồng Độ");
+            bulkcopy.ColumnMappings.Add(2, "Tính Chất");
+            bulkcopy.ColumnMappings.Add(3, " Số Lượng");
+            bulkcopy.ColumnMappings.Add(4, " Đơn Vị");
+            bulkcopy.ColumnMappings.Add(5, "Thể Tích");
+            bulkcopy.ColumnMappings.Add(6, "Nguồn Gốc");
+            bulkcopy.ColumnMappings.Add(7, "Đánh Giá");
+            con.Open();
+            bulkcopy.WriteToServer(dt);
+            con.Close();
+        }
+        /* public ActionResult UploadFile (HttpPostedFileBase file)
+         {
+             try
+             {
+                 if (file.ContentLength > 0)
+                 {
+
+                     string _FileName = DateTime.Now.Year.ToString() + DateTime.Now.Date.ToString();
+
+                     string _path = Path.Combine(Server.MapPath("~/Uploads/ExcelFile/"), _FileName);
+
+                     file.SaveAs(_path);
+
+                     CopyDataByBulk(ReadDataFromExcelFile(_path));
+                     ViewBag.ThongBao = "cap nhat thanh cong";
+                 }
+             }
+             catch (Exception ex)
+             {
+                 ViewBag.ThongBao = "cap nhat thanh cong";
+             }
+             return RedirectToAction("Index");
+         }*/
+
+        //copy large data from datatable to sqlserver
 
 
 
